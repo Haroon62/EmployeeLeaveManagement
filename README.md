@@ -57,17 +57,16 @@ instance before running the migration:
 ```json
 {
   "ConnectionStrings": {
-    "DefaultConnection": "Server=MCS\\SQLEXPRESS;Database=EmployeeLeaveManagement;Trusted_Connection=True;TrustServerCertificate=True;User ID=sa;Password=123;"
+    "DefaultConnection": "Server=;Database=EmployeeLeaveManagement;Trusted_Connection=True;TrustServerCertificate=True;User ID=;Password=;"
   }
 }
 ```
 
-This configuration uses:
+Must Add Below Field in Connection String:
 
-- Server/source: `MCS\\SQLEXPRESS`
-- Database: `EmployeeLeaveManagement`
-- User ID: `sa`
-- Password: `123`
+- Server/source: ``
+- User ID: ``
+- Password: ``
 
 After saving the connection string, run:
 
