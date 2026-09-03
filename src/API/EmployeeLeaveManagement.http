@@ -1,0 +1,157 @@
+@host = http://localhost:5266
+@adminToken = paste-admin-access-token-here
+@managerToken = paste-manager-access-token-here
+@employeeToken = paste-employee-access-token-here
+@engineeringDepartmentId = d98f9d6d-d617-4b82-82eb-2ff6f3aef6e9
+@managerEmployeeId = d91e1506-cb7f-4d5a-9b95-fdbc9fecc3a0
+@resourceId = paste-created-resource-id-here
+
+### Health
+GET {{host}}/health
+
+### Admin login
+POST {{host}}/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@leave.local",
+  "password": "Admin123!"
+}
+
+### Manager login
+POST {{host}}/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "manager@leave.local",
+  "password": "Manager123!"
+}
+
+### Employee login
+POST {{host}}/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "employee@leave.local",
+  "password": "Employee123!"
+}
+
+### Register employee - change email and employee number before repeating
+POST {{host}}/api/auth/register
+Content-Type: application/json
+
+{
+  "email": "new.employee@leave.local",
+  "password": "Employee123!",
+  "employeeNumber": "EMP-002",
+  "firstName": "New",
+  "lastName": "Employee",
+  "departmentId": "{{engineeringDepartmentId}}"
+}
+
+### List employees as Admin
+GET {{host}}/api/employees
+Authorization: Bearer {{adminToken}}
+
+### List employees as Manager - department scoped
+GET {{host}}/api/employees
+Authorization: Bearer {{managerToken}}
+
+### Create employee as Admin
+POST {{host}}/api/employees
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "email": "second.employee@leave.local",
+  "password": "Employee123!",
+  "employeeNumber": "EMP-003",
+  "firstName": "Second",
+  "lastName": "Employee",
+  "departmentId": "{{engineeringDepartmentId}}",
+  "managerId": "{{managerEmployeeId}}",
+  "role": "Employee"
+}
+
+### Update employee as Admin
+PUT {{host}}/api/employees/{{resourceId}}
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "firstName": "Updated",
+  "lastName": "Employee",
+  "departmentId": "{{engineeringDepartmentId}}",
+  "managerId": "{{managerEmployeeId}}",
+  "role": "Employee",
+  "isActive": true
+}
+
+### Deactivate employee as Admin
+DELETE {{host}}/api/employees/{{resourceId}}
+Authorization: Bearer {{adminToken}}
+
+### List departments
+GET {{host}}/api/departments
+Authorization: Bearer {{adminToken}}
+
+### Create department
+POST {{host}}/api/departments
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "name": "Quality Assurance",
+  "description": "Quality engineering and testing"
+}
+
+### Update department
+PUT {{host}}/api/departments/{{resourceId}}
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "name": "Quality Assurance",
+  "description": "Quality engineering and automated testing",
+  "managerEmployeeId": null,
+  "isActive": true
+}
+
+### Deactivate department
+DELETE {{host}}/api/departments/{{resourceId}}
+Authorization: Bearer {{adminToken}}
+
+### List leave types
+GET {{host}}/api/leave-types
+Authorization: Bearer {{employeeToken}}
+
+### Create leave type
+POST {{host}}/api/leave-types
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "name": "Personal Leave",
+  "description": "Leave for personal matters",
+  "defaultAnnualDays": 5
+}
+
+### Update leave type
+PUT {{host}}/api/leave-types/{{resourceId}}
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "name": "Personal Leave",
+  "description": "Updated personal leave policy",
+  "defaultAnnualDays": 6,
+  "isActive": true
+}
+
+### Deactivate leave type
+DELETE {{host}}/api/leave-types/{{resourceId}}
+Authorization: Bearer {{adminToken}}
+
+### Logout - execute last because it revokes the token
+POST {{host}}/api/auth/logout
+Authorization: Bearer {{employeeToken}}
